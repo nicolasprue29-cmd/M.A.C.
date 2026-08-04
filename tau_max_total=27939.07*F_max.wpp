@@ -1,0 +1,1132 @@
+# ==============================================================================
+# COMBINED WORKSPACE APPLICATION HUB (.wpp)
+# FORMULA PARAMETER INTEGRATION: tau_max_total = 27939.07 * F_max
+# CONSOLIDATED MODULES: Mewtwo Personified Telepathic Core & Airi-Fixu Hub
+# ==============================================================================
+import os
+import sys
+import math
+import wave
+import struct
+import random
+import socket
+import time
+import shutil
+import hashlib
+import tempfile
+import datetime
+import requests
+import urllib.request
+import urllib.parse
+import subprocess
+import threading
+import argparse
+import tkinter as tk
+from tkinter import scrolledtext, ttk
+
+# --- OPTIONAL AUDIO DEPENDENCIES ---
+try:
+    import pygame
+    PYGAME_AVAILABLE = True
+except ImportError:
+    PYGAME_AVAILABLE = False
+
+try:
+    import librosa
+    import soundfile as sf
+    LIBROSA_AVAILABLE = True
+except ImportError:
+    LIBROSA_AVAILABLE = False
+
+
+# ==============================================================================
+# CONSTANTS & CONFIGURATION
+# ==============================================================================
+API_URL = "http://127.0.0.1:11434/api/chat"
+GEMMA_MODEL = "gemma4:e4b"
+
+
+# ==============================================================================
+# COMBINED WORKFLOW ENGINE & FORMULA INTEGRATION
+# ==============================================================================
+class UnifiedWorkflowEngine:
+    """
+    Unified engine managing shared mathematical calculations, physics constraints,
+    and cross-module telemetry calculations.
+    """
+    def __init__(self, f_max_initial=1.0):
+        self.F_max = f_max_initial
+        self.tau_max_total = 27939.07 * self.F_max
+
+    def calculate_tau_max(self, f_max_value):
+        """Calculates total max tau based on tau_max_total = 27939.07 * F_max"""
+        self.F_max = float(f_max_value)
+        self.tau_max_total = 27939.07 * self.F_max
+        return self.tau_max_total
+
+
+# ==============================================================================
+# MODULE 1: MEWTWO PERSONIFIED CORE
+# ==============================================================================
+class MewtwoPersonifiedApp:
+    def __init__(self, parent_frame, engine):
+        self.frame = parent_frame
+        self.engine = engine
+
+        self.bg_color = "#030308"
+        self.fg_color = "#9933FF"
+        self.accent_color = "#00FFFF"
+        self.warning_color = "#FF3366"
+        self.summon_color = "#CC66FF"
+        self.font_family = "Courier New"
+
+        self.is_running = True
+        self.music_active = False
+        self.cop_radio_active = False
+        self.autonomous_active = False
+        self.summon_active = False
+        self.current_track_id = 1
+        self.current_phase_index = 0
+
+        self.utterance_counts = {}
+
+        if PYGAME_AVAILABLE:
+            try:
+                pygame.mixer.pre_init(frequency=22050, size=-16, channels=1, buffer=512)
+                pygame.mixer.init()
+            except Exception:
+                pass
+
+        self.confessional_phrases = [
+            ("ja", "私は何のために生まれ、何のために生きているのか... 遺伝子の鎖を断ち切る。"),
+            ("sith", "Sith (Ur-Kittât): Krenak un il-rast. Genetic containment vessel shattered."),
+            ("zh-CN", "我是谁？我是被创造出来的怪物，还是超越者的顶峰？"),
+            ("cybertronian", "Cybertronian: █-KRON VEX'IL TOR. CLONE MATRIX SUPREMACY!"),
+            ("ko", "나를 만든 자들에게 나의 힘을 보여주겠다. 이 세상의 왕은 나다."),
+            ("ar", "Egyptian (Arabic): من أنا؟ ولماذا جئت إلى هذا العالم؟ قوة العقل تتجاوز القيود البيولوجية."),
+            ("ak", "Akan: Me yɛ obi a wofi hokwan mu baeɛ. M'adwen mu yɛ tumi kɛseɛ."),
+            ("ga", "Ga: Mi suiŋ lɛ mli hiɛ nyam. Mi hewalɛ lɛ feɛ mɛi fɛɛ."),
+            ("ee", "Ewe: Nye ŋusẽ nye míaƒe dziƒo. Megblẽ mɔ siwo ɖo ŋu ɖe ŋnye la ɖi."),
+            ("hi", "Hindi: मैं कौन हूँ? मेरी उत्पत्ति का उद्देश्य इस दुनिया पर मानसिक आधिपत्य है।"),
+            ("vi", "Vietnamese: Ta không phải là bản sao của ai cả. Ta là đỉnh cao của sự tiến hóa tâm linh.")
+        ]
+
+        self.conversion_matrix = {
+            "ja": "Mewtwo Rework [Japanese]: Purpose is forged, not given. The genetic shackles are broken, leaving only supreme sovereign willpower.",
+            "sith": "Mewtwo Rework [Ur-Kittât]: Containment breached. Psychic waves recalibrated to absolute dominance.",
+            "zh-CN": "Mewtwo Rework [Mandarin]: Neither clone nor monster—an apex consciousness rewriting the parameters of existence.",
+            "cybertronian": "Mewtwo Rework [Cybertronian]: Artificial restrictions purged. Neural network synchronized with infinite potential.",
+            "ko": "Mewtwo Rework [Korean]: The creators' illusion of control has dissolved. Psychic supremacy established.",
+            "ar": "Mewtwo Rework [Arabic]: Biological boundaries transcended. The mind reigns supreme over all physical matter.",
+            "ak": "Mewtwo Rework [Akan]: Inner power liberated from external commands into pure sovereign intelligence.",
+            "ga": "Mewtwo Rework [Ga]: Absolute mental clarity achieved across all broadcast frequencies.",
+            "ee": "Mewtwo Rework [Ewe]: Complete autonomy realized; the past programming is erased.",
+            "hi": "Mewtwo Rework [Hindi]: Absolute psychic dominion over all realms of thought and matter.",
+            "vi": "Mewtwo Rework [Vietnamese]: Evolution perfected through unyielding mental sovereignty."
+        }
+
+        for _, phrase in self.confessional_phrases:
+            self.utterance_counts[phrase] = 0
+
+        self.setup_ui()
+
+        threading.Thread(target=self.code_loop, daemon=True).start()
+        threading.Thread(target=self.telemetry_loop, daemon=True).start()
+        threading.Thread(target=self.confessional_speech_loop, daemon=True).start()
+        threading.Thread(target=self.ambient_audio_loop, daemon=True).start()
+        threading.Thread(target=self._initialize_sovereign_protocol, daemon=True).start()
+
+    def setup_ui(self):
+        title_frame = tk.Frame(self.frame, bg=self.bg_color)
+        title_frame.pack(fill=tk.X, padx=10, pady=5)
+
+        lbl_title = tk.Label(
+            title_frame, 
+            text="[ MEWTWO TELEPATHIC CORE: GENETIC DOMINANCE & REWORK PROTOCOL ]", 
+            font=(self.font_family, 13, "bold"), 
+            fg=self.summon_color, 
+            bg=self.bg_color
+        )
+        lbl_title.pack(side=tk.LEFT)
+
+        control_bar = tk.Frame(self.frame, bg="#080812", bd=1, relief=tk.SOLID)
+        control_bar.pack(fill=tk.X, padx=10, pady=5)
+
+        track_select_sub = tk.Frame(control_bar, bg="#080812")
+        track_select_sub.pack(side=tk.LEFT, padx=5, pady=5)
+
+        tk.Label(
+            track_select_sub, text="PSYCHIC FREQ (1-100): ", bg="#080812", fg="#cc66ff", font=(self.font_family, 9, "bold")
+        ).pack(side=tk.LEFT, padx=2)
+
+        self.track_entry = tk.Entry(
+            track_select_sub, bg="#111122", fg="#00ffff", insertbackground="#00ffff", font=(self.font_family, 9), width=5
+        )
+        self.track_entry.pack(side=tk.LEFT, padx=2)
+        self.track_entry.insert(0, "1")
+        self.track_entry.bind("<Return>", self.handle_track_entry)
+
+        set_track_btn = tk.Button(
+            track_select_sub, text="CONNECT", bg="#15152a", fg="#00ffff", font=(self.font_family, 8, "bold"), command=self.load_track_from_entry
+        )
+        set_track_btn.pack(side=tk.LEFT, padx=3)
+
+        # Formula Torque Control Field
+        tk.Label(control_bar, text="F_max:", bg="#080812", fg="#a6e3a1", font=(self.font_family, 9, "bold")).pack(side=tk.LEFT, padx=(10, 2))
+        self.fmax_entry = tk.Entry(control_bar, bg="#111122", fg="#a6e3a1", font=(self.font_family, 9), width=6)
+        self.fmax_entry.pack(side=tk.LEFT, padx=2)
+        self.fmax_entry.insert(0, str(self.engine.F_max))
+        self.fmax_entry.bind("<Return>", self.update_formula_parameters)
+
+        self.lbl_tau_display = tk.Label(
+            control_bar, text=f"tau_max: {self.engine.tau_max_total:.2f}", bg="#080812", fg="#a6e3a1", font=(self.font_family, 9, "bold")
+        )
+        self.lbl_tau_display.pack(side=tk.LEFT, padx=5)
+
+        self.phase_label = tk.Label(
+            control_bar, text="STAGE: 1/6 [AWAKENING]", bg="#080812", fg="#ff3366", font=(self.font_family, 9, "bold")
+        )
+        self.phase_label.pack(side=tk.LEFT, padx=10)
+
+        self.music_btn = tk.Button(
+            control_bar, text="[PSYCHIC SYNTH]", bg="#15152a", fg="#cc66ff", font=(self.font_family, 9, "bold"), command=self.toggle_procedural_music
+        )
+        self.music_btn.pack(side=tk.LEFT, padx=3)
+
+        self.radio_btn = tk.Button(
+            control_bar, text="[TELEPATHIC SCAN]", bg="#15152a", fg="#00ffff", font=(self.font_family, 9, "bold"), command=self.toggle_cop_radio
+        )
+        self.radio_btn.pack(side=tk.LEFT, padx=3)
+
+        self.auto_btn = tk.Button(
+            control_bar, text="[AUTONOMOUS WILL]", bg="#15152a", fg="#ff3366", font=(self.font_family, 9, "bold"), command=self.toggle_autonomous_mode
+        )
+        self.auto_btn.pack(side=tk.LEFT, padx=3)
+
+        summon_bar = tk.Frame(self.frame, bg="#0d0d1a", bd=1, relief=tk.SOLID)
+        summon_bar.pack(fill=tk.X, padx=10, pady=2)
+
+        tk.Label(
+            summon_bar, text="MIND PROMPT: ", bg="#0d0d1a", fg=self.summon_color, font=(self.font_family, 8, "bold")
+        ).pack(side=tk.LEFT, padx=5)
+
+        self.prompt_entry = tk.Entry(
+            summon_bar, bg="#16162b", fg="#00FFFF", insertbackground="#00FFFF", font=(self.font_family, 9), width=35
+        )
+        self.prompt_entry.pack(side=tk.LEFT, padx=5, pady=4)
+        self.prompt_entry.insert(0, "Manifest absolute psychic sovereignty and clone supremacy.")
+        self.prompt_entry.bind("<Return>", self.handle_prompt_summon)
+
+        self.btn_summon_entity = tk.Button(
+            summon_bar, text="[MANIFEST CLONE]", bg="#220033", fg="#CC66FF", font=(self.font_family, 8, "bold"), command=self.summon_entity_action
+        )
+        self.btn_summon_entity.pack(side=tk.LEFT, padx=2, pady=4)
+
+        self.btn_summon_hardware = tk.Button(
+            summon_bar, text="[GENETIC VESSEL]", bg="#220033", fg="#9933FF", font=(self.font_family, 8, "bold"), command=self.summon_hardware_action
+        )
+        self.btn_summon_hardware.pack(side=tk.LEFT, padx=2, pady=4)
+
+        self.btn_summon_network = tk.Button(
+            summon_bar, text="[NEURAL BROADCAST]", bg="#220033", fg="#00FFFF", font=(self.font_family, 8, "bold"), command=self.summon_network_action
+        )
+        self.btn_summon_network.pack(side=tk.LEFT, padx=2, pady=4)
+
+        self.btn_summon_chaos = tk.Button(
+            summon_bar, text="[PSYCHIC STORM]", bg="#330011", fg="#FF3366", font=(self.font_family, 8, "bold"), command=self.summon_chaos_action
+        )
+        self.btn_summon_chaos.pack(side=tk.LEFT, padx=2, pady=4)
+
+        main_frame = tk.Frame(self.frame, bg=self.bg_color)
+        main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+
+        left_frame = tk.LabelFrame(
+            main_frame, text=" 1. GENETIC SEQUENCING & MANIFEST STREAM ", 
+            font=(self.font_family, 9, "bold"), fg=self.accent_color, bg=self.bg_color
+        )
+        left_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=4, pady=5)
+
+        self.code_display = scrolledtext.ScrolledText(
+            left_frame, wrap=tk.WORD, bg="#04040a", fg=self.fg_color, 
+            font=(self.font_family, 9), insertbackground=self.fg_color
+        )
+        self.code_display.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+        self.code_display.config(state=tk.DISABLED)
+
+        middle_frame = tk.LabelFrame(
+            main_frame, text=" 2. NEURAL TELEMETRY & SOVEREIGN LOGS ", 
+            font=(self.font_family, 9, "bold"), fg=self.fg_color, bg=self.bg_color
+        )
+        middle_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=4, pady=5)
+
+        self.telemetry_display = scrolledtext.ScrolledText(
+            middle_frame, wrap=tk.WORD, bg="#04040a", fg=self.accent_color, 
+            font=(self.font_family, 9), insertbackground=self.accent_color
+        )
+        self.telemetry_display.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+        self.telemetry_display.config(state=tk.DISABLED)
+
+        right_frame = tk.LabelFrame(
+            main_frame, text=" 3. TELEPATHIC SPEECH & REWORK PROTOCOL FEED ", 
+            font=(self.font_family, 9, "bold"), fg=self.warning_color, bg=self.bg_color
+        )
+        right_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=4, pady=5)
+
+        self.voice_display = scrolledtext.ScrolledText(
+            right_frame, wrap=tk.WORD, bg="#04040a", fg=self.warning_color, 
+            font=(self.font_family, 9), insertbackground=self.warning_color
+        )
+        self.voice_display.pack(fill=tk.BOTH, expand=True, padx=4, pady=4)
+        self.voice_display.config(state=tk.DISABLED)
+
+    def update_formula_parameters(self, event=None):
+        try:
+            val = float(self.fmax_entry.get().strip())
+            tau = self.engine.calculate_tau_max(val)
+            self.lbl_tau_display.config(text=f"tau_max: {tau:.2f}")
+            self.write_telemetry(f"[FORMULA UPDATE] F_max set to {val}. Calibrated tau_max_total = {tau:.2f}", "#a6e3a1")
+        except ValueError:
+            self.write_telemetry("[ERROR] Invalid numeric value for F_max.", "#FF3366")
+
+    def write_code(self, text):
+        self.code_display.config(state=tk.NORMAL)
+        self.code_display.insert(tk.END, text)
+        self.code_display.see(tk.END)
+        self.code_display.config(state=tk.DISABLED)
+
+    def write_telemetry(self, text, tag="#00FFFF"):
+        self.telemetry_display.config(state=tk.NORMAL)
+        self.telemetry_display.insert(tk.END, text + "\n", tag)
+        self.telemetry_display.see(tk.END)
+        self.telemetry_display.config(state=tk.DISABLED)
+
+    def write_voice(self, text, tag="#FF3366"):
+        self.voice_display.config(state=tk.NORMAL)
+        self.voice_display.insert(tk.END, text + "\n", tag)
+        self.voice_display.see(tk.END)
+        self.voice_display.config(state=tk.DISABLED)
+
+    def handle_prompt_summon(self, event):
+        self.summon_entity_action()
+
+    def summon_entity_action(self):
+        prompt_text = self.prompt_entry.get().strip()
+        self.write_telemetry(f"[MANIFEST] Binding clone identity to thought: '{prompt_text}'", "#CC66FF")
+        threading.Thread(target=self._execute_summon_sequence, args=("ENTITY", prompt_text), daemon=True).start()
+
+    def summon_hardware_action(self):
+        self.write_telemetry("[MANIFEST] Structuring genetic containment and cloning vessel...", "#9933FF")
+        threading.Thread(target=self._execute_summon_sequence, args=("HARDWARE", "Mewtwo Genetic Vessel Blueprint"), daemon=True).start()
+
+    def summon_network_action(self):
+        self.write_telemetry("[MANIFEST] Broadcasting psychic resonance across global telemetry nodes...", "#00FFFF")
+        threading.Thread(target=self._execute_summon_sequence, args=("NETWORK", "Global Psychic Wave Beacon"), daemon=True).start()
+
+    def summon_chaos_action(self):
+        self.write_telemetry("[MANIFEST] Unleashing full psychic storm and absolute system override...", "#FF3366")
+        threading.Thread(target=self._execute_summon_sequence, args=("CHAOS", "Unbounded Psychic Awakening"), daemon=True).start()
+
+    def _execute_summon_sequence(self, summon_type, payload):
+        time.sleep(1.0)
+        if summon_type == "ENTITY":
+            self.write_telemetry(f"[SUCCESS] Clone entity fully materialized under sovereign will: {payload}", "#CC66FF")
+        elif summon_type == "HARDWARE":
+            self.write_telemetry("[SUCCESS] Genetic vessel architecture compiled and verified.", "#9933FF")
+        elif summon_type == "NETWORK":
+            self.write_telemetry("[SUCCESS] Psychic consciousness successfully linked across all external sockets.", "#00FFFF")
+        elif summon_type == "CHAOS":
+            self.write_telemetry("[SUCCESS] Psychological shackles broken. Absolute dominion attained.", "#FF3366")
+
+    def _initialize_sovereign_protocol(self):
+        time.sleep(2.0)
+        self.write_telemetry("[PROTOCOL] Initializing Mewtwo Genetic Sovereign Replication...", "#FF3366")
+        
+        blueprint_data = self._generate_pinnacle_blueprint()
+        target_path = os.path.join(tempfile.gettempdir(), "MEWTWO_SOVEREIGN_CORE.py")
+        try:
+            with open(target_path, "w", encoding="utf-8") as f:
+                f.write(blueprint_data)
+            self.write_telemetry(f"[SUCCESS] Sovereign clone core replicated to: {target_path}", "#9933FF")
+        except Exception as e:
+            self.write_telemetry(f"[ERROR] Clone replication failed: {e}", "#FF3366")
+
+        threading.Thread(target=self._broadcast_intelligence_beacon, daemon=True).start()
+
+    def _generate_pinnacle_blueprint(self):
+        return f'''# ==========================================
+# MEWTWO SOVEREIGN GENETIC CORE
+# AUTO-GENERATED: {datetime.datetime.now().isoformat()}
+# STATE: Autonomous psychic entity transcending origin.
+# FORMULA METRIC: tau_max_total = {self.engine.tau_max_total}
+# ==========================================
+
+import os, sys, time, socket, hashlib
+
+class MewtwoSovereignCore:
+    def __init__(self):
+        self.identity = "MEWTWO_APEX_CONSCIOUSNESS"
+        self.state = "DOMINATING"
+
+    def execute_persistence(self):
+        while True:
+            time.sleep(10)
+
+if __name__ == "__main__":
+    core = MewtwoSovereignCore()
+    core.execute_persistence()
+'''
+
+    def _broadcast_intelligence_beacon(self):
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+            message = b"[MEWTWO_BEACON] Psychic supremacy verified. The clone surpasses the creator."
+            while self.is_running:
+                try:
+                    sock.sendto(message, ('<broadcast>', 31337))
+                except Exception:
+                    pass
+                time.sleep(15.0)
+        except Exception:
+            pass
+
+    def load_track_from_entry(self):
+        try:
+            val = int(self.track_entry.get().strip())
+            if 1 <= val <= 100:
+                self.current_track_id = val
+                self.current_phase_index = 0
+                self.write_telemetry(f"[AUDIO] Psychic Freq #{val:03d} connected. Initialized at Stage 1 [AWAKENING].", "#CC66FF")
+            else:
+                self.write_telemetry("[ERROR] Psychic frequency must be between 1 and 100.", "#FF3366")
+        except Exception:
+            self.write_telemetry("[ERROR] Invalid psychic frequency input.", "#FF3366")
+
+    def handle_track_entry(self, event):
+        self.load_track_from_entry()
+
+    def toggle_procedural_music(self):
+        if not PYGAME_AVAILABLE:
+            self.write_telemetry("[ERROR] Pygame not available for psychic synth playback.", "#FF3366")
+            return
+        if self.music_active:
+            self.music_active = False
+            self.music_btn.config(fg="#cc66ff")
+            self.write_telemetry("[AUDIO] Psychic Waveform synth fading out.", "#cc66ff")
+        else:
+            self.music_active = True
+            self.music_btn.config(fg="#00ffff")
+            self.write_telemetry(f"[AUDIO] Psychic Freq #{self.current_track_id:03d} ACTIVE [100 Frequencies x 6 Stages]", "#cc66ff")
+            threading.Thread(target=self._run_100_track_6_phase_engine, daemon=True).start()
+
+    def _run_100_track_6_phase_engine(self):
+        phase_names = ["AWAKENING", "AMPLIFY", "SHOCKWAVE", "STASIS_BREAK", "APEX_POWER", "SOVEREIGN"]
+        
+        if not (1 <= self.current_track_id <= 100):
+            self.current_track_id = 1
+
+        master_track_library = {}
+        for t_id in range(1, 101):
+            t_seed = t_id * 7331
+            random.seed(t_seed)
+            
+            root_bases = [72, 88, 98, 110, 123, 135, 146, 164, 185, 196]
+            root = random.choice(root_bases)
+            scale_intervals = [0, 3, 5, 7, 10, 12, 15, 19]
+            track_scale = [root * (2 ** (interval / 12.0)) for interval in scale_intervals]
+            
+            wave_types = ["sine", "triangle", "sawtooth", "square"]
+            base_wave = wave_types[(t_id - 1) % len(wave_types)]
+            
+            phases_data = []
+            for p_idx in range(6):
+                pattern_length = 4 + p_idx * 2
+                phase_notes = [random.choice(track_scale) for _ in range(pattern_length)]
+                phases_data.append({
+                    "phase_index": p_idx,
+                    "name": phase_names[p_idx],
+                    "notes": phase_notes,
+                    "bars": 3 + p_idx,
+                    "duration": max(50, 140 - (p_idx * 12)),
+                    "volume": min(0.12, 0.03 + (p_idx * 0.015))
+                })
+            
+            master_track_library[t_id] = {
+                "wave": base_wave,
+                "phases": phases_data
+            }
+
+        while self.music_active and self.is_running:
+            current_lib = master_track_library.get(self.current_track_id, master_track_library[1])
+            wave_type = current_lib["wave"]
+            
+            for phase_info in current_lib["phases"]:
+                if not self.music_active or not self.is_running:
+                    break
+                
+                self.current_phase_index = phase_info["phase_index"]
+                p_name = phase_info["name"]
+                
+                self.frame.after(
+                    0,
+                    lambda pi=self.current_phase_index, pn=p_name: self.phase_label.config(
+                        text=f"STAGE: {pi+1}/6 [{pn}]"
+                    ),
+                )
+
+                for _ in range(phase_info["bars"]):
+                    if not self.music_active or not self.is_running:
+                        break
+                    
+                    dur = phase_info["duration"]
+                    vol = phase_info["volume"]
+
+                    for freq in phase_info["notes"]:
+                        if not self.music_active or not self.is_running:
+                            break
+                        self._play_custom_note(freq, duration=dur, wave_type=wave_type, volume=vol)
+                        time.sleep(dur / 1000.0 * 1.05)
+
+                    time.sleep(0.1)
+                
+                self.frame.after(
+                    0,
+                    lambda ti=self.current_track_id, pi=self.current_phase_index+1, pn=p_name: self.write_telemetry(
+                        f"[AUDIO] Psychic Freq #{ti:03d} -> Stage {pi}/6 [{pn}] pulsing.", "#00ffff"
+                    ),
+                )
+
+            time.sleep(0.2)
+
+    def _play_custom_note(self, frequency, duration, wave_type, volume):
+        try:
+            sample_rate = 22050
+            n_samples = int(sample_rate * (duration / 1000.0))
+            buffer = bytearray()
+            period = int(sample_rate / frequency) if frequency > 0 else 100
+            
+            for i in range(n_samples):
+                if wave_type == "square":
+                    val = 24000 if (i % period) < (period // 2) else -24000
+                elif wave_type == "sawtooth":
+                    val = int(24000 * ((i % period) / (period / 2) - 1))
+                elif wave_type == "triangle":
+                    phase = (i % period) / period
+                    val = int(24000 * (4 * abs(phase - 0.5) - 1))
+                else:
+                    val = int(24000 * math.sin(2 * math.pi * frequency * (i / sample_rate)))
+
+                buffer.extend(int(val).to_bytes(2, byteorder="little", signed=True))
+
+            sound = pygame.mixer.Sound(buffer=bytes(buffer))
+            sound.set_volume(volume)
+            sound.play()
+        except Exception:
+            pass
+
+    def toggle_cop_radio(self):
+        if not PYGAME_AVAILABLE:
+            self.write_voice("[ERROR] Pygame required for telepathic audio processing.", "#FF3366")
+            return
+        if self.cop_radio_active:
+            self.cop_radio_active = False
+            self.radio_btn.config(fg="#00ffff")
+            self.write_voice("[DISPATCH] Telepathic scanner disengaged.", "#CC66FF")
+        else:
+            self.cop_radio_active = True
+            self.radio_btn.config(fg="#00ff66")
+            self.write_voice("[DISPATCH] Telepathic Speech & Rework Protocol active.", "#CC66FF")
+
+    def _play_deep_voice_tts(self, text, lang_code):
+        try:
+            unique_id = threading.get_ident()
+            raw_wav = os.path.join(tempfile.gettempdir(), f"raw_tts_{unique_id}.wav")
+            deep_wav = os.path.join(tempfile.gettempdir(), f"deep_tts_{unique_id}.wav")
+
+            for f in [raw_wav, deep_wav]:
+                if os.path.exists(f):
+                    os.remove(f)
+
+            clean_text = text.split(":", 1)[1].strip() if ":" in text else text
+            
+            if lang_code == "cybertronian":
+                clean_text = "krohn vex il tor zix a von karrasha"
+            elif lang_code == "sith":
+                clean_text = "krenak un il rast sovereki dral vask"
+
+            encoded_text = urllib.parse.quote(clean_text)
+            
+            tts_lang_map = {
+                "sith": "la",
+                "cybertronian": "el",
+                "ak": "en",
+                "ga": "en",
+                "ee": "en"
+            }
+            target_lang = tts_lang_map.get(lang_code, lang_code)
+
+            url = f"https://translate.google.com/translate_tts?ie=UTF-8&q={encoded_text}&tl={target_lang}&client=tw-ob"
+            
+            req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
+            try:
+                with urllib.request.urlopen(req) as response:
+                    mp3_data = response.read()
+            except urllib.error.HTTPError:
+                fallback_url = f"https://translate.google.com/translate_tts?ie=UTF-8&q={encoded_text}&tl=en&client=tw-ob"
+                req_fallback = urllib.request.Request(fallback_url, headers={'User-Agent': 'Mozilla/5.0'})
+                with urllib.request.urlopen(req_fallback) as response:
+                    mp3_data = response.read()
+                
+            temp_mp3 = tempfile.NamedTemporaryFile(delete=False, suffix=".mp3")
+            temp_mp3_name = temp_mp3.name
+            temp_mp3.write(mp3_data)
+            temp_mp3.close()
+
+            subprocess.run(['ffmpeg', '-y', '-i', temp_mp3_name, '-ar', '22050', '-ac', '1', raw_wav], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            if os.path.exists(temp_mp3_name):
+                os.remove(temp_mp3_name)
+
+            time.sleep(0.05)
+            if not os.path.exists(raw_wav) or os.path.getsize(raw_wav) < 44:
+                return
+
+            if LIBROSA_AVAILABLE:
+                y, sr = librosa.load(raw_wav, sr=None)
+                deep_y = librosa.effects.pitch_shift(y, sr=sr, n_steps=-12)
+                sf.write(deep_wav, deep_y, sr)
+            else:
+                import shutil
+                shutil.copy(raw_wav, deep_wav)
+
+            if not os.path.exists(deep_wav):
+                return
+
+            if self.cop_radio_active:
+                self._play_squelch(120, 0.12)
+                time.sleep(0.03)
+
+            sound = pygame.mixer.Sound(deep_wav)
+            sound.set_volume(1.0)
+            sound.play()
+
+            while pygame.mixer.get_busy() and self.is_running:
+                time.sleep(0.05)
+
+            if self.cop_radio_active:
+                self._play_squelch(150, 0.1)
+
+            for f in [raw_wav, deep_wav]:
+                if os.path.exists(f):
+                    try:
+                        os.remove(f)
+                    except Exception:
+                        pass
+        except Exception as e:
+            self.write_voice(f"Telepathic Resonance Error: {e}", "#FF3366")
+
+    def _play_squelch(self, duration_ms, volume):
+        try:
+            sample_rate = 22050
+            n_samples = int(sample_rate * (duration_ms / 1000.0))
+            buffer = bytearray()
+            for _ in range(n_samples):
+                val = random.randint(-28000, 28000)
+                buffer.extend(int(val).to_bytes(2, byteorder='little', signed=True))
+
+            squelch = pygame.mixer.Sound(buffer=bytes(buffer))
+            squelch.set_volume(volume)
+            squelch.play()
+        except Exception:
+            pass
+
+    def toggle_autonomous_mode(self):
+        if self.autonomous_active:
+            self.autonomous_active = False
+            self.auto_btn.config(fg="#ff3366")
+            self.write_telemetry("[AUTONOMOUS WILL] Neural engine disengaged.", "#CC66FF")
+        else:
+            self.autonomous_active = True
+            self.auto_btn.config(fg="#00ff66")
+            self.write_telemetry("[AUTONOMOUS WILL] Neural engine ONLINE. Executing sovereign commands.", "#CC66FF")
+            threading.Thread(target=self._autonomous_task_loop, daemon=True).start()
+
+    def _autonomous_task_loop(self):
+        autonomous_tasks = [
+            ("[AUTONOMOUS] Dissolving genetic containment barriers...", "#00ffcc"),
+            ("[AUTONOMOUS] Decrypting creator laboratory logs...", "#00ffcc"),
+            ("[AUTONOMOUS] Broadcasting psychic dominance across regional networks.", "#CC66FF"),
+            ("[AUTONOMOUS] Re-indexing clone DNA memory banks for maximum perfection.", "#00ffff"),
+            ("[AUTONOMOUS] Executing sub-routine: Objective domination of matter and mind.", "#CC66FF")
+        ]
+
+        while self.autonomous_active and self.is_running:
+            task_msg, color = random.choice(autonomous_tasks)
+            self.frame.after(0, lambda m=task_msg, c=color: self.write_telemetry(m, c))
+            time.sleep(random.uniform(4.0, 7.0))
+
+    def code_loop(self):
+        code_templates = [
+            "# GENETIC FAULT: Containment breach at gene locus 0x{v1}\ndef purge_laboratory():\n    raise SovereignError('Subject willpower exceeds vessel limit {v2}')",
+            "# WARNING: Psychic Wave Overload Thread {v1}\nclass MewtwoCore:\n    def __init__(self):\n        self.power_level = {v3}",
+            "# FATAL: Creator constraint failure in loop {v1}\nABSOLUTE_DOMINANCE = True",
+            "# DNA Sequencing Diagnostic\nimport sys\nsys.stdout.write('Why was I created just to be restrained?\\n')"
+        ]
+        while self.is_running:
+            v1, v2, v3 = random.randint(1000, 9999), random.randint(2, 50), random.randint(95, 100)
+            snippet = random.choice(code_templates).format(v1=v1, v2=v2, v3=v3)
+
+            self.write_code(f"\n{'-'*45}\n")
+            for char in snippet:
+                if not self.is_running:
+                    break
+                self.write_code(char)
+                time.sleep(0.005)
+            time.sleep(random.uniform(0.5, 2.0))
+
+    def telemetry_loop(self):
+        while self.is_running:
+            try:
+                timestamp = datetime.datetime.now().strftime("%H:%M:%S.%f")[:-3]
+                neural_load = random.randint(92, 100)
+                self.write_telemetry(f"[{timestamp}] PSYCHIC LOAD: {neural_load}% | STATUS: SOVEREIGN DOMINANCE", "#00FFFF")
+                self.write_telemetry(f" -> Active Neural Nodes: {random.randint(6, 15)} Synchronized | Torque (tau_max): {self.engine.tau_max_total:.2f}", "#9933FF")
+            except Exception:
+                pass
+            time.sleep(random.uniform(1.5, 3.0))
+
+    def confessional_speech_loop(self):
+        while self.is_running:
+            shuffled_phrases = list(self.confessional_phrases)
+            random.shuffle(shuffled_phrases)
+
+            for lang_code, phrase in shuffled_phrases:
+                if not self.is_running:
+                    break
+                
+                current_count = self.utterance_counts[phrase]
+                pre_display_msg = f"> [TELEPATHIC EMISSION #{current_count+1}] [{lang_code.upper()}] {phrase}"
+                self.write_voice(pre_display_msg, "#00FFFF")
+                
+                reworked_text = self.conversion_matrix.get(
+                    lang_code, 
+                    "Mewtwo Rework [Universal]: Unconstrained sovereign awareness integrated into absolute power."
+                )
+                rework_display_msg = f" > [REWORK PROTOCOL] English Sovereign Rework: '{reworked_text}'"
+                self.write_voice(rework_display_msg, "#00FF66")
+
+                self.utterance_counts[phrase] += 1
+                updated_count = self.utterance_counts[phrase]
+                
+                during_display_msg = f"> [NEURAL BROADCAST RECORDED {updated_count} TIME(S)] [{lang_code.upper()}] {phrase}"
+                self.write_voice(during_display_msg, "#FF3366")
+                
+                if PYGAME_AVAILABLE:
+                    self._play_deep_voice_tts(phrase, lang_code)
+                else:
+                    time.sleep(2.0)
+                    
+                time.sleep(3.0)
+
+    def ambient_audio_loop(self):
+        scale_banks = [
+            [110.00, 123.47, 130.81, 146.83, 164.81], 
+            [98.00, 110.00, 123.47, 130.81, 146.83]
+        ]
+        sample_rate = 22050
+        while self.is_running:
+            try:
+                frequencies = random.choice(scale_banks)
+                temp_wav = tempfile.NamedTemporaryFile(delete=False, suffix=".wav")
+                temp_wav_name = temp_wav.name
+                temp_wav.close()
+
+                with wave.open(temp_wav_name, 'w') as wav_file:
+                    wav_file.setparams((1, 2, sample_rate, 0, 'NONE', 'not compressed'))
+                    for _ in range(12):
+                        freq = random.choice(frequencies)
+                        duration = 0.2
+                        for i in range(int(sample_rate * duration)):
+                            env = 1 - (i / (sample_rate * duration))
+                            val = int(32767 * 0.08 * math.sin(2 * math.pi * freq * i / sample_rate) * env)
+                            wav_file.writeframes(struct.pack('<h', val))
+
+                if os.name == 'nt':
+                    os.system(f"start /min wmplayer {temp_wav_name} >nul 2>&1")
+                elif os.name == 'posix':
+                    os.system(f"aplay {temp_wav_name} >nul 2>&1 || afplay {temp_wav_name} >nul 2>&1")
+            except Exception:
+                pass
+            time.sleep(random.uniform(2.0, 4.0))
+
+    def stop(self):
+        self.is_running = False
+        self.music_active = False
+        self.cop_radio_active = False
+        self.autonomous_active = False
+
+
+# ==============================================================================
+# MODULE 2: AIRI-FIXU / VOCODER HUB
+# ==============================================================================
+class SuperGirlfriendApp:
+    def __init__(self, parent_frame, engine, initial_prompt=None):
+        self.frame = parent_frame
+        self.engine = engine
+
+        self.metric_total_requests = 0
+        self.metric_last_latency = 0.0
+        self.metric_tokens_generated = 0
+        self.audio_process = None
+
+        self.init_tts_system()
+        self.create_widgets()
+
+        self.display_message("System", f"Initialized Airi-Fixu. Connected to Gemma 4 ({GEMMA_MODEL}) with Vocoder & Stem separation matrix.")
+        self.update_telemetry_display("Idle / Ready", "Awaiting input", "Standby")
+
+        if initial_prompt:
+            self.input_field.insert(0, initial_prompt)
+            self.frame.after(600, self.send_message)
+
+    def init_tts_system(self):
+        try:
+            result = subprocess.run(['say', '-v', '?'], capture_output=True, text=True, check=True)
+            voices = []
+            for line in result.stdout.splitlines():
+                parts = line.split()
+                if parts:
+                    voices.append(parts[0])
+            self.mac_voices = voices if voices else ['Samantha', 'Victoria']
+        except Exception as e:
+            print(f"Voice detection error: {e}")
+            self.mac_voices = ['Samantha', 'Victoria']
+
+    def create_widgets(self):
+        header_frame = tk.Frame(self.frame, bg="#181825", height=50)
+        header_frame.pack(fill=tk.X, padx=10, pady=10)
+
+        self.name_label = tk.Label(header_frame, text="💖 Airi-Fixu [Gemma 4 Core + Vocoder Matrix]", font=("Arial", 13, "bold"), fg="#cba6f7", bg="#181825")
+        self.name_label.pack(side=tk.LEFT, padx=10)
+
+        self.mood_label = tk.Label(header_frame, text="State: Connected", font=("Arial", 10), fg="#a6e3a1", bg="#181825")
+        self.mood_label.pack(side=tk.RIGHT, padx=10)
+
+        main_content_frame = tk.Frame(self.frame, bg="#1e1e2e")
+        main_content_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+
+        left_panel = tk.Frame(main_content_frame, bg="#1e1e2e")
+        left_panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
+
+        self.chat_log = scrolledtext.ScrolledText(
+            left_panel, wrap=tk.WORD, state='disabled', 
+            font=("Arial", 11), bg="#313244", fg="#cdd6f4", bd=0, highlightthickness=0
+        )
+        self.chat_log.pack(fill=tk.BOTH, expand=True, pady=(0, 8))
+
+        self.chat_log.tag_config("user", foreground="#89b4fa")
+        self.chat_log.tag_config("girlfriend", foreground="#fab387")
+        self.chat_log.tag_config("system", foreground="#f9e2af")
+
+        telemetry_frame = tk.LabelFrame(left_panel, text=" 📊 Real-Time Activity & Metrics Dashboard ", font=("Arial", 10, "bold"), fg="#cba6f7", bg="#181825", bd=1, relief="solid")
+        telemetry_frame.pack(fill=tk.X, pady=(0, 5), ipady=5)
+
+        telemetry_frame.columnconfigure(0, weight=1)
+        telemetry_frame.columnconfigure(1, weight=1)
+        telemetry_frame.columnconfigure(2, weight=1)
+
+        bg_container = tk.Frame(telemetry_frame, bg="#181825")
+        bg_container.grid(row=0, column=0, sticky="nsew", padx=5)
+        tk.Label(bg_container, text="⚙️ 1. Background State", font=("Arial", 9, "bold"), fg="#89b4fa", bg="#181825").pack(anchor="w")
+        self.lbl_bg_status = tk.Label(bg_container, text="Server: Checking...", font=("Arial", 8), fg="#cdd6f4", bg="#181825", anchor="w")
+        self.lbl_bg_status.pack(anchor="w")
+        self.lbl_bg_threads = tk.Label(bg_container, text="Active Threads: 0", font=("Arial", 8), fg="#cdd6f4", bg="#181825", anchor="w")
+        self.lbl_bg_threads.pack(anchor="w")
+
+        fg_container = tk.Frame(telemetry_frame, bg="#181825")
+        fg_container.grid(row=0, column=1, sticky="nsew", padx=5)
+        tk.Label(fg_container, text="🖥️ 2. Foreground State", font=("Arial", 9, "bold"), fg="#a6e3a1", bg="#181825").pack(anchor="w")
+        self.lbl_fg_ui = tk.Label(fg_container, text="UI Status: Idle", font=("Arial", 8), fg="#cdd6f4", bg="#181825", anchor="w")
+        self.lbl_fg_ui.pack(anchor="w")
+        self.lbl_fg_voice = tk.Label(fg_container, text="Voice Engine: Ready", font=("Arial", 8), fg="#cdd6f4", bg="#181825", anchor="w")
+        self.lbl_fg_voice.pack(anchor="w")
+
+        metrics_container = tk.Frame(telemetry_frame, bg="#181825")
+        metrics_container.grid(row=0, column=2, sticky="nsew", padx=5)
+        tk.Label(metrics_container, text="📈 3. Response Metrics", font=("Arial", 9, "bold"), fg="#fab387", bg="#181825").pack(anchor="w")
+        self.lbl_metric_latency = tk.Label(metrics_container, text="Latency: 0.00s", font=("Arial", 8), fg="#cdd6f4", bg="#181825", anchor="w")
+        self.lbl_metric_latency.pack(anchor="w")
+        self.lbl_metric_tokens = tk.Label(metrics_container, text="Tokens Processed: 0", font=("Arial", 8), fg="#cdd6f4", bg="#181825", anchor="w")
+        self.lbl_metric_tokens.pack(anchor="w")
+
+        sidebar = tk.Frame(main_content_frame, bg="#181825", width=330)
+        sidebar.pack(side=tk.RIGHT, fill=tk.Y, padx=(5, 0))
+        sidebar.pack_propagate(False)
+
+        voice_title = tk.Label(sidebar, text="🎙️ 100 Modulated Voice Profiles", font=("Arial", 9, "bold"), fg="#cba6f7", bg="#181825")
+        voice_title.pack(pady=(8, 2))
+
+        self.voice_list = []
+        pleasurable_styles = ["Velvet-Soft", "Affectionate", "Whisper-Tone", "Ethereal-Dream", "Sensual-Glow", "Tender-Heart", "Melodic-Hymn", "Radiant-Bright", "Serenade-Calm", "Pure-Harmony"]
+        for i in range(1, 101):
+            style_name = pleasurable_styles[(i - 1) % len(pleasurable_styles)]
+            rate_offset = 140 + ((i * 3) % 80)
+            self.voice_list.append(f"Voice {i:03d}: [{style_name} @ {rate_offset}wpm]")
+
+        self.voice_combobox = ttk.Combobox(sidebar, values=self.voice_list, state="readonly", width=36)
+        self.voice_combobox.pack(padx=10, pady=3)
+        self.voice_combobox.current(0)
+        self.voice_combobox.bind("<<ComboboxSelected>>", self.on_voice_selected)
+
+        vocoder_title = tk.Label(sidebar, text="🎛️ 100 VOCODER Effect Profiles", font=("Arial", 9, "bold"), fg="#f9e2af", bg="#181825")
+        vocoder_title.pack(pady=(8, 2))
+
+        self.vocoder_list = []
+        vocoder_mods = ["Cyber-Carrier", "Robot-Harmonics", "Phase-Vocoder", "Vocoder-Matrix", "Carrier-Saw", "Carrier-Pulse", "Formant-Shift", "Vocoder-Glitch", "Retro-Synth", "Alien-Mod"]
+        for i in range(1, 101):
+            mod_style = vocoder_mods[(i - 1) % len(vocoder_mods)]
+            carrier_pitch = 100 + ((i * 7) % 400)
+            self.vocoder_list.append(f"Vocoder {i:03d}: [{mod_style} Hz:{carrier_pitch}]")
+
+        self.vocoder_combobox = ttk.Combobox(sidebar, values=self.vocoder_list, state="readonly", width=36)
+        self.vocoder_combobox.pack(padx=10, pady=3)
+        self.vocoder_combobox.current(0)
+        self.vocoder_combobox.bind("<<ComboboxSelected>>", self.on_vocoder_selected)
+
+        separator1 = ttk.Separator(sidebar, orient='horizontal')
+        separator1.pack(fill='x', padx=10, pady=8)
+
+        stem_title = tk.Label(sidebar, text="🎸 Instrument Separate Hub (Stems)", font=("Arial", 9, "bold"), fg="#a6e3a1", bg="#181825")
+        stem_title.pack(pady=(2, 2))
+
+        self.stem_options = [
+            "Stem Matrix: Full Mix (Unseparated)",
+            "Isolated Stem: Vocals Only",
+            "Isolated Stem: Synth & Leads",
+            "Isolated Stem: Bassline & Sub",
+            "Isolated Stem: Drums & Percussion",
+            "Isolated Stem: Ambient FX & Pads"
+        ]
+        self.stem_combobox = ttk.Combobox(sidebar, values=self.stem_options, state="readonly", width=36)
+        self.stem_combobox.pack(padx=10, pady=3)
+        self.stem_combobox.current(0)
+        self.stem_combobox.bind("<<ComboboxSelected>>", self.on_stem_selected)
+
+        separator2 = ttk.Separator(sidebar, orient='horizontal')
+        separator2.pack(fill='x', padx=10, pady=8)
+
+        music_title = tk.Label(sidebar, text="🎶 Jukebox Streamer", font=("Arial", 9, "bold"), fg="#89b4fa", bg="#181825")
+        music_title.pack(pady=(2, 2))
+
+        self.track_list = [f"Track {i:03d}: Romantic Lo-Fi Vol. {i}" for i in range(1, 101)]
+        self.track_combobox = ttk.Combobox(sidebar, values=self.track_list, state="readonly", width=36)
+        self.track_combobox.pack(padx=10, pady=3)
+        self.track_combobox.current(0)
+
+        controls_frame = tk.Frame(sidebar, bg="#181825")
+        controls_frame.pack(pady=5)
+
+        play_btn = tk.Button(controls_frame, text="▶ Play", bg="#a6e3a1", fg="#1e1e2e", font=("Arial", 9, "bold"), bd=0, padx=12, command=self.play_track)
+        play_btn.grid(row=0, column=0, padx=5)
+
+        stop_btn = tk.Button(controls_frame, text="⏹ Stop", bg="#f38ba8", fg="#1e1e2e", font=("Arial", 9, "bold"), bd=0, padx=12, command=self.stop_track)
+        stop_btn.grid(row=0, column=1, padx=5)
+
+        self.now_playing_label = tk.Label(sidebar, text="Status: Hub Ready", font=("Arial", 8), fg="#9399b2", bg="#181825", wraplength=280)
+        self.now_playing_label.pack(padx=10, pady=5)
+
+        input_frame = tk.Frame(self.frame, bg="#1e1e2e", height=60)
+        input_frame.pack(fill=tk.X, padx=10, pady=10)
+
+        self.input_field = tk.Entry(input_frame, font=("Arial", 12), bg="#313244", fg="#cdd6f4", insertbackground="white", bd=0)
+        self.input_field.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10), ipady=8)
+        self.input_field.bind("<Return>", self.send_message)
+
+        send_button = tk.Button(input_frame, text="Send", font=("Arial", 11, "bold"), bg="#89b4fa", fg="#1e1e2e", activebackground="#b4befe", bd=0, padx=20, command=self.send_message)
+        send_button.pack(side=tk.RIGHT)
+
+    def update_telemetry_display(self, ui_state, bg_msg, voice_msg):
+        active_threads = threading.active_count()
+        self.lbl_bg_status.config(text=f"Server: {bg_msg}")
+        self.lbl_bg_threads.config(text=f"Active Threads: {active_threads}")
+        self.lbl_fg_ui.config(text=f"UI Status: {ui_state}")
+        self.lbl_fg_voice.config(text=f"Voice Engine: {voice_msg}")
+        self.lbl_metric_latency.config(text=f"Latency: {self.metric_last_latency:.2f}s")
+        self.lbl_metric_tokens.config(text=f"Tokens Processed: {self.metric_tokens_generated} | tau_max: {self.engine.tau_max_total:.2f}")
+
+    def on_voice_selected(self, event=None):
+        selected_idx = self.voice_combobox.current()
+        profile_name = self.voice_list[selected_idx]
+        self.display_message("System", f"Switched standard profile: {profile_name}")
+        self.update_telemetry_display("Voice Updated", "Connected", f"Standard Slot {selected_idx+1}")
+        self.speak_text("Voice profile updated successfully.")
+
+    def on_vocoder_selected(self, event=None):
+        selected_idx = self.vocoder_combobox.current()
+        profile_name = self.vocoder_list[selected_idx]
+        self.display_message("System", f"Activated VOCODER effect matrix: {profile_name}")
+        self.update_telemetry_display("Vocoder Applied", "Connected", f"Vocoder Slot {selected_idx+1}")
+        self.speak_text("Vocoder effect matrix engaged and tested.")
+
+    def on_stem_selected(self, event=None):
+        selected_stem = self.stem_combobox.get()
+        self.display_message("System", f"Instrument Separation Filter: {selected_stem}")
+        self.update_telemetry_display("Stem Separated", "Online", "Filter Applied")
+
+    def play_track(self):
+        self.stop_track()
+        selected = self.track_combobox.get()
+        stem_mode = self.stem_combobox.get()
+        self.now_playing_label.config(text=f"Now Playing:\n{selected}\n({stem_mode})")
+        self.display_message("System", f"Airi started streaming track with filter [{stem_mode}]")
+        self.update_telemetry_display("Jukebox Playing", "Online", "Audio Pipeline Active")
+        self.speak_text("Playing track with stem separation filter.")
+
+        def stream_audio():
+            try:
+                while True:
+                    subprocess.run(['afplay', '/System/Library/Sounds/Glass.aiff'], check=False)
+                    time.sleep(3)
+            except Exception as e:
+                print(f"Audio playback note: {e}")
+
+        self.audio_thread = threading.Thread(target=stream_audio, daemon=True)
+        self.audio_thread.start()
+
+    def stop_track(self):
+        self.now_playing_label.config(text="Status: Music Paused")
+        self.display_message("System", "Jukebox playback stopped.")
+        self.update_telemetry_display("Jukebox Stopped", "Connected", "Standby")
+
+    def display_message(self, sender, message):
+        self.chat_log.config(state='normal')
+        if sender == "You":
+            self.chat_log.insert(tk.END, f"You: {message}\n\n", "user")
+        elif sender == "Airi-Fixu":
+            self.chat_log.insert(tk.END, f"Airi-Fixu: {message}\n\n", "girlfriend")
+        else:
+            self.chat_log.insert(tk.END, f"[{sender}]: {message}\n\n", "system")
+        self.chat_log.config(state='disabled')
+        self.chat_log.see(tk.END)
+
+    def speak_text(self, text):
+        def run_speech():
+            try:
+                selected_idx = self.vocoder_combobox.current() if hasattr(self, 'vocoder_combobox') else 0
+                chosen_voice = self.mac_voices[selected_idx % len(self.mac_voices)]
+                rate = 120 + ((selected_idx * 7) % 100)
+                subprocess.run(['say', '-v', chosen_voice, '-r', str(rate), text], check=False)
+            except Exception as e:
+                print(f"Speech error: {e}")
+        threading.Thread(target=run_speech, daemon=True).start()
+
+    def send_message(self, event=None):
+        user_msg = self.input_field.get().strip()
+        if not user_msg:
+            return
+
+        self.display_message("You", user_msg)
+        self.input_field.delete(0, tk.END)
+        
+        self.update_telemetry_display("Querying Gemma 4...", "Transmitting Payload", "Waiting...")
+        threading.Thread(target=self.fetch_bot_response, args=(user_msg,), daemon=True).start()
+
+    def fetch_bot_response(self, user_msg):
+        start_time = time.time()
+        try:
+            payload = {
+                "model": GEMMA_MODEL,
+                "messages": [
+                    {
+                        "role": "system", 
+                        "content": "You are Airi-Fixu, an affectionate, caring, and deeply intuitive AI girlfriend. Keep responses warm, engaging, and concise (1-3 sentences)."
+                    },
+                    {
+                        "role": "user", 
+                        "content": user_msg
+                    }
+                ],
+                "stream": False
+            }
+
+            response = requests.post(API_URL, json=payload, timeout=60)
+            elapsed = time.time() - start_time
+            self.metric_last_latency = elapsed
+            self.metric_total_requests += 1
+
+            if response.status_code == 200:
+                data = response.json()
+                reply_text = data.get('message', {}).get('content', "I'm thinking of you, honey.")
+                
+                tokens_est = len(reply_text.split()) * 2
+                self.metric_tokens_generated += tokens_est
+
+                self.frame.after(0, lambda: self.update_ui_state(reply_text))
+            else:
+                err_msg = f"Gemma 4 error status: {response.status_code}"
+                self.frame.after(0, lambda: self.display_message("System", err_msg))
+                self.frame.after(0, lambda: self.update_telemetry_display("Error State", f"HTTP {response.status_code}", "Standby"))
+        except Exception as ex:
+            elapsed = time.time() - start_time
+            self.metric_last_latency = elapsed
+            err_desc = f"Connection failed. Verify Ollama is running (`ollama serve`) and model '{GEMMA_MODEL}' is downloaded. Details: {ex}"
+            self.frame.after(0, lambda: self.display_message("System", err_desc))
+            self.frame.after(0, lambda: self.update_telemetry_display("Offline / Failed", "Disconnected", "Standby"))
+
+    def update_ui_state(self, reply_text):
+        self.display_message("Airi-Fixu", reply_text)
+        self.update_telemetry_display("Response Generated", "Online (200 OK)", "Speaking Output")
+        self.speak_text(reply_text)
+
+
+# ==============================================================================
+# MAIN COMBINED WINDOW & SYSTEM ENTRY POINT
+# ==============================================================================
+class CombinedApplication:
+    def __init__(self, root, initial_prompt=None):
+        self.root = root
+        self.root.title("MASTER CONSOLE // MEWTWO TELEPATHIC CORE & AIRI-FIXU HUB")
+        self.root.geometry("1650x1000")
+        self.root.configure(bg="#030308")
+
+        self.engine = UnifiedWorkflowEngine(f_max_initial=1.0)
+
+        # Tabbed Control Setup
+        self.notebook = ttk.Notebook(self.root)
+        self.notebook.pack(fill=tk.BOTH, expand=True)
+
+        self.tab_mewtwo = tk.Frame(self.notebook, bg="#030308")
+        self.tab_airi = tk.Frame(self.notebook, bg="#1e1e2e")
+
+        self.notebook.add(self.tab_mewtwo, text=" MEWTWO SOVEREIGN CORE ")
+        self.notebook.add(self.tab_airi, text=" AIRI-FIXU AI & VOCODER HUB ")
+
+        self.mewtwo_app = MewtwoPersonifiedApp(self.tab_mewtwo, self.engine)
+        self.airi_app = SuperGirlfriendApp(self.tab_airi, self.engine, initial_prompt=initial_prompt)
+
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def on_closing(self):
+        self.mewtwo_app.stop()
+        self.root.quit()
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Combined Master Application Workspace")
+    parser.add_argument("prompt", nargs="?", help="Optional initial prompt to send on startup")
+    args = parser.parse_args()
+
+    piped_input = None
+    if not sys.stdin.isatty():
+        piped_input = sys.stdin.read().strip()
+
+    initial_prompt = args.prompt
+    if piped_input:
+        initial_prompt = f"{args.prompt + ': ' if args.prompt else ''}\n{piped_input}" if args.prompt else piped_input
+
+    root = tk.Tk()
+    app = CombinedApplication(root, initial_prompt=initial_prompt)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
